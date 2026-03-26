@@ -349,6 +349,11 @@ OpenSettings(*) {
 
     linkHelp := settingsGui.AddLink("ys", '<a href="https://door-fujita.com/contents/VoiceDropper/help/">ヘルプ</a>')
 
+    settingsGui.AddText("xm w400", "")
+    settingsGui.AddText("xm w400", "VoiceDropperは木工職人の工房「藤田建具店」が開発しています。")
+    settingsGui.AddText("xm w400", "このツールが役に立ったら、ぜひ応援してください！")
+    settingsGui.AddLink("xm", '<a href="https://doorfujita.buyshop.jp/">オンラインショップを見る</a>　<a href="https://door-fujita.com/contents/VoiceDropper/">VoiceDropper公式ページ</a>')
+
     settingsGui.Show()
 }
 
