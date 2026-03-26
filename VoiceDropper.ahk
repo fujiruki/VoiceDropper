@@ -8,10 +8,14 @@ TARGET_TITLES := ["Chrome Remote Desktop", "Chrome リモート デスクトッ�
 FLASH_COLOR := "C8F7C5"
 DEFAULT_COLOR := "FFFFFF"
 
+; --- 履歴ファイル ---
+HISTORY_FILE := A_ScriptDir "\history.txt"
+HISTORY_SEP := "``n---VD_SEP---``n"
+
 ; --- 状態 ---
 prevActiveHwnd := 0
 wasTargetActive := false
-history := []
+history := LoadHistory()
 
 ; --- GUI構築 ---
 app := Gui("+AlwaysOnTop +Resize -Caption", "VoiceDropper")
@@ -63,6 +67,54 @@ WM_NCHITTEST(wParam, lParam, msg, hwnd) {
     result := DllCall("DefWindowProc", "Ptr", hwnd, "UInt", WM_NC, "Ptr", wParam, "Ptr", lParam)
     if (result = 1) {
         return 2
+    }
+}
+
+; --- 履歴の読込・保存 ---
+LoadHistory() {
+    global HISTORY_FILE, HISTORY_SEP, MAX_HISTORY
+    h := []
+    if !FileExist(HISTORY_FILE) {
+        return h
+    }
+    try {
+        content := FileRead(HISTORY_FILE, "UTF-8")
+    } catch {
+        return h
+    }
+    if (content = "") {
+        return h
+    }
+    parts := StrSplit(content, "---VD_SEP---")
+    for part in parts {
+        text := Trim(part, "`n`r")
+        if (text != "" && h.Length < MAX_HISTORY) {
+            h.Push(text)
+        }
+    }
+    return h
+}
+
+SaveHistory() {
+    global history, HISTORY_FILE
+    if (history.Length = 0) {
+        if FileExist(HISTORY_FILE) {
+            FileDelete(HISTORY_FILE)
+        }
+        return
+    }
+    lines := ""
+    for idx, text in history {
+        if (idx > 1) {
+            lines .= "`n---VD_SEP---`n"
+        }
+        lines .= text
+    }
+    try {
+        if FileExist(HISTORY_FILE) {
+            FileDelete(HISTORY_FILE)
+        }
+        FileAppend(lines, HISTORY_FILE, "UTF-8")
     }
 }
 
@@ -120,6 +172,7 @@ DoCopy() {
     }
 
     editCtrl.Value := ""
+    SaveHistory()
     FlashNotify()
 }
 
@@ -137,6 +190,7 @@ ManualCopy(*) {
         history.Pop()
     }
 
+    SaveHistory()
     FlashNotify()
 }
 
@@ -153,6 +207,7 @@ ManualClear(*) {
     }
 
     editCtrl.Value := ""
+    SaveHistory()
 }
 
 ; --- コピー通知（背景色フラッシュ） ---
@@ -195,6 +250,7 @@ SelectHistory(idx, *) {
     text := history[idx]
     editCtrl.Value := text
     A_Clipboard := text
+    SaveHistory()
     FlashNotify()
 }
 
