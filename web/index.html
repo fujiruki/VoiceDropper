@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoiceDropper — 音声入力をリモートデスクトップへ橋渡しするツール</title>
+  <meta name="description" content="VoiceDropperは、ローカルPCの音声入力をChromeリモートデスクトップ先のPCへワンステップで転送する無料の常駐型Windowsツールです。">
+  <meta name="keywords" content="VoiceDropper,音声入力,Chromeリモートデスクトップ,クリップボード,AutoHotkey,Windows,リモートワーク">
+  <meta name="author" content="藤田建具店">
+  <link rel="canonical" href="https://door-fujita.com/contents/VoiceDropper/">
+  <meta property="og:title" content="VoiceDropper — 音声入力をリモートデスクトップへ橋渡し">
+  <meta property="og:description" content="ローカルPCの音声入力をChromeリモートデスクトップ先へワンステップで転送。無料のWindows常駐ツール。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://door-fujita.com/contents/VoiceDropper/">
+  <meta property="og:image" content="https://door-fujita.com/contents/VoiceDropper/assets/og-image.png">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "VoiceDropper",
+    "operatingSystem": "Windows 10, Windows 11",
+    "applicationCategory": "UtilitiesApplication",
+    "description": "ローカルPCの音声入力をChromeリモートデスクトップ先のPCへワンステップで転送する常駐型ツール",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
+    "author": { "@type": "Organization", "name": "藤田建具店", "url": "https://door-fujita.com" },
+    "softwareRequirements": "AutoHotkey v2.0",
+    "downloadUrl": "https://door-fujita.com/contents/VoiceDropper/download/VoiceDropper.ahk"
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg: #f8f9fa;
+      --c-surface: #ffffff;
+      --c-primary: #2563eb;
+      --c-primary-dark: #1d4ed8;
+      --c-text: #1e293b;
+      --c-text-sub: #64748b;
+      --c-border: #e2e8f0;
+      --c-accent: #c8f7c5;
+      --shadow: 0 1px 3px rgba(0,0,0,.08);
+      --radius: 8px;
+      --max-w: 960px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Segoe UI", "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: var(--c-bg);
+      color: var(--c-text);
+      line-height: 1.7;
+    }
+
+    /* --- Header --- */
+    .site-header {
+      background: var(--c-surface);
+      border-bottom: 1px solid var(--c-border);
+      padding: 12px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-header .inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .site-header .logo {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--c-text);
+      text-decoration: none;
+    }
+    .site-header nav a {
+      color: var(--c-text-sub);
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: .9rem;
+    }
+    .site-header nav a:hover { color: var(--c-primary); }
+
+    /* --- Hero --- */
+    .hero {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 64px 20px 48px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      letter-spacing: -.02em;
+    }
+    .hero .tagline {
+      font-size: 1.15rem;
+      color: var(--c-text-sub);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .hero .cta-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .15s, transform .1s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primary {
+      background: var(--c-primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--c-primary-dark); }
+    .btn-outline {
+      background: var(--c-surface);
+      color: var(--c-primary);
+      border: 2px solid var(--c-primary);
+    }
+    .btn-outline:hover { background: #eff6ff; }
+
+    /* --- Screenshot --- */
+    .screenshot {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 20px 48px;
+      text-align: center;
+    }
+    .screenshot img {
+      max-width: 100%;
+      width: 600px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    }
+    .screenshot .placeholder {
+      width: 600px;
+      max-width: 100%;
+      height: 340px;
+      background: var(--c-border);
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--c-text-sub);
+      font-size: .95rem;
+      box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    }
+
+    /* --- Features --- */
+    .features {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+    .features h2 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 36px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+    .feature-card .icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .feature-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      color: var(--c-text-sub);
+      font-size: .9rem;
+    }
+
+    /* --- Video --- */
+    .video-section {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 48px 20px;
+      text-align: center;
+    }
+    .video-section h2 {
+      font-size: 1.6rem;
+      margin-bottom: 24px;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.15);
+    }
+    .video-wrapper video,
+    .video-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #aaa;
+      font-size: .95rem;
+    }
+
+    /* --- How it works --- */
+    .how-it-works {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 48px 20px;
+    }
+    .how-it-works h2 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 36px;
+    }
+    .steps {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .step {
+      flex: 1 1 200px;
+      max-width: 280px;
+      text-align: center;
+    }
+    .step .number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background: var(--c-primary);
+      color: #fff;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .step h3 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+    .step p {
+      color: var(--c-text-sub);
+      font-size: .9rem;
+    }
+
+    /* --- Download --- */
+    .download {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 48px 20px;
+      text-align: center;
+    }
+    .download .box {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow);
+    }
+    .download h2 {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+    .download .note {
+      color: var(--c-text-sub);
+      font-size: .9rem;
+      margin-bottom: 24px;
+    }
+    .download .req {
+      margin-top: 16px;
+      font-size: .85rem;
+      color: var(--c-text-sub);
+    }
+
+    /* --- Footer --- */
+    .site-footer {
+      border-top: 1px solid var(--c-border);
+      padding: 24px 20px;
+      text-align: center;
+      font-size: .85rem;
+      color: var(--c-text-sub);
+      margin-top: 48px;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.6rem; }
+      .hero .tagline { font-size: 1rem; }
+      .steps { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="inner">
+      <a href="/contents/VoiceDropper/" class="logo">VoiceDropper</a>
+      <nav>
+        <a href="#features">機能</a>
+        <a href="#demo">使い方</a>
+        <a href="#download">ダウンロード</a>
+        <a href="help/">ヘルプ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>音声入力を、リモートデスクトップへ。</h1>
+      <p class="tagline">VoiceDropperは、ローカルPCで音声入力したテキストをChromeリモートデスクトップ先へワンステップで転送する常駐型Windowsツールです。</p>
+      <div class="cta-group">
+        <a href="#download" class="btn btn-primary">無料ダウンロード</a>
+        <a href="help/" class="btn btn-outline">使い方を見る</a>
+      </div>
+    </section>
+
+    <section class="screenshot">
+      <!-- スクリーンショットを assets/screenshot.png に配置してください -->
+      <div class="placeholder">assets/screenshot.png を配置するとここに表示されます</div>
+      <!-- <img src="assets/screenshot.png" alt="VoiceDropperのメイン画面" width="600" height="340"> -->
+    </section>
+
+    <section class="features" id="features">
+      <h2>特長</h2>
+      <div class="features-grid">
+        <article class="feature-card">
+          <div class="icon">🎤</div>
+          <h3>ワンクリック音声入力</h3>
+          <p>マイクボタンを押すだけでWindows音声入力（Win+H）を起動。キーボードに触れずにテキストを入力できます。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon">📋</div>
+          <h3>フォーカス検知で自動コピー</h3>
+          <p>Chromeリモートデスクトップに切り替えた瞬間、メモ内容を自動でクリップボードにコピー。あとは Ctrl+V するだけ。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon">⚙</div>
+          <h3>柔軟な設定</h3>
+          <p>自動コピーの対象ウィンドウを自由に選択可能。Chrome リモートデスクトップ以外のアプリにも対応できます。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon">📂</div>
+          <h3>履歴管理</h3>
+          <p>コピー済みテキストを最大100件まで履歴に保持。ドロップダウンから選ぶだけで過去のメモを復元・再コピーできます。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon">📌</div>
+          <h3>常に最前面 &amp; タイトルバーレス</h3>
+          <p>コンパクトなウィンドウは常に最前面表示。タイトルバーを排除し、どこをドラッグしても移動可能。最小限の画面占有。</p>
+        </article>
+        <article class="feature-card">
+          <div class="icon">🪶</div>
+          <h3>超軽量</h3>
+          <p>AutoHotkey v2 スクリプト1ファイルで完結。インストーラー不要、レジストリ汚染なし。スタートアップに登録するだけ。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="how-it-works" id="how">
+      <h2>3ステップで使える</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="number">1</div>
+          <h3>音声でメモ入力</h3>
+          <p>🎤ボタンを押してWindows音声入力を起動し、テキストボックスに話しかけます。</p>
+        </div>
+        <div class="step">
+          <div class="number">2</div>
+          <h3>リモートデスクトップに切替</h3>
+          <p>Chromeリモートデスクトップのウィンドウをクリック。メモが自動でクリップボードにコピーされます。</p>
+        </div>
+        <div class="step">
+          <div class="number">3</div>
+          <h3>Ctrl+V で貼り付け</h3>
+          <p>リモートPC側の好きな場所にペースト。完了です。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="video-section" id="demo">
+      <h2>使い方デモ</h2>
+      <div class="video-wrapper">
+        <!-- 動画ファイルを assets/demo.mp4 に配置するか、YouTubeのiframeに差し替えてください -->
+        <div class="video-placeholder">assets/demo.mp4 を配置するか、YouTube埋め込みに差し替えてください</div>
+        <!--
+        <video controls poster="assets/demo-poster.png">
+          <source src="assets/demo.mp4" type="video/mp4">
+        </video>
+        -->
+        <!--
+        <iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" title="VoiceDropper 使い方デモ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        -->
+      </div>
+    </section>
+
+    <section class="download" id="download">
+      <div class="box">
+        <h2>ダウンロード</h2>
+        <p class="note">無料で使えます。商用利用OK。</p>
+        <a href="download/VoiceDropper.ahk" class="btn btn-primary" download>VoiceDropper.ahk をダウンロード</a>
+        <p class="req">動作環境: Windows 10 / 11 + <a href="https://www.autohotkey.com/" target="_blank" rel="noopener">AutoHotkey v2.0</a> 以上</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>&copy; 2026 <a href="https://door-fujita.com" style="color:inherit">藤田建具店</a> — VoiceDropper</p>
+  </footer>
+</body>
+</html>
