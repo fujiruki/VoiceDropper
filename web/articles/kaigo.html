@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>介護記録の入力を音声で効率化 — 転記作業をゼロにするVoiceDropper</title>
+  <meta name="description" content="訪問介護の記録入力を音声で効率化。メモからシステムへの転記作業がなくなる無料ツールVoiceDropperの活用法を紹介。">
+  <meta name="keywords" content="介護記録,音声入力,訪問介護,業務効率化,ヘルパー,記録システム,VoiceDropper">
+  <link rel="canonical" href="https://door-fujita.com/contents/VoiceDropper/articles/kaigo.html">
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <meta property="og:title" content="介護記録の入力を音声で効率化 — 転記作業をゼロに">
+  <meta property="og:description" content="音声で話して確認してから記録システムに貼り付け。介護現場の入力負担を減らす無料ツール。">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://door-fujita.com/contents/VoiceDropper/articles/kaigo.html">
+  <meta property="og:image" content="https://door-fujita.com/contents/VoiceDropper/assets/icon.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "介護記録の入力を音声で効率化 — 転記作業をゼロにするVoiceDropper",
+    "author": { "@type": "Organization", "name": "藤田建具店" },
+    "datePublished": "2026-03-27",
+    "publisher": { "@type": "Organization", "name": "藤田建具店", "url": "https://door-fujita.com" }
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --c-bg: #f8f9fa; --c-surface: #ffffff; --c-primary: #2563eb;
+      --c-text: #1e293b; --c-text-sub: #64748b; --c-border: #e2e8f0;
+      --c-accent-bg: #eff6ff; --radius: 8px; --max-w: 760px;
+    }
+    body { font-family: "Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif; background: var(--c-bg); color: var(--c-text); line-height: 1.85; }
+    .header { background: var(--c-surface); border-bottom: 1px solid var(--c-border); padding: 12px 0; position: sticky; top: 0; z-index: 10; }
+    .header .inner { max-width: var(--max-w); margin: 0 auto; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+    .header .logo { font-size: 1.1rem; font-weight: 700; color: var(--c-text); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .header .logo img { border-radius: 6px; }
+    .header nav a { color: var(--c-text-sub); text-decoration: none; margin-left: 16px; font-size: .9rem; }
+    article { max-width: var(--max-w); margin: 0 auto; padding: 48px 20px 80px; }
+    article h1 { font-size: 1.8rem; margin-bottom: 16px; line-height: 1.4; }
+    article .meta { color: var(--c-text-sub); font-size: .85rem; margin-bottom: 32px; }
+    article h2 { font-size: 1.3rem; margin: 36px 0 14px; padding-left: 12px; border-left: 4px solid var(--c-primary); }
+    article p { margin-bottom: 14px; }
+    article ul, article ol { margin: 0 0 16px 1.5em; }
+    article li { margin-bottom: 6px; }
+    .highlight { background: var(--c-accent-bg); border-left: 4px solid var(--c-primary); padding: 16px 20px; border-radius: 0 var(--radius) var(--radius) 0; margin: 20px 0; }
+    .cta-box { background: var(--c-surface); border: 2px solid var(--c-primary); border-radius: var(--radius); padding: 32px; text-align: center; margin: 40px 0; }
+    .cta-box h3 { margin-top: 0; font-size: 1.2rem; margin-bottom: 12px; }
+    .cta-box p { color: var(--c-text-sub); margin-bottom: 20px; }
+    .btn { display: inline-flex; padding: 12px 28px; border-radius: var(--radius); font-size: 1rem; font-weight: 600; text-decoration: none; background: var(--c-primary); color: #fff; }
+    .btn:hover { background: #1d4ed8; }
+    .scenario { background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 20px; margin: 16px 0; }
+    .scenario h3 { margin-top: 0; font-size: 1rem; }
+    .footer { border-top: 1px solid var(--c-border); padding: 24px 20px; text-align: center; font-size: .85rem; color: var(--c-text-sub); }
+    .footer a { color: inherit; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="inner">
+      <a href="/contents/VoiceDropper/" class="logo"><img src="../assets/icon.png" alt="" width="28" height="28">VoiceDropper</a>
+      <nav>
+        <a href="/contents/VoiceDropper/">トップ</a>
+        <a href="/contents/VoiceDropper/#download">ダウンロード</a>
+      </nav>
+    </div>
+  </header>
+
+  <article>
+    <h1>介護記録の入力を音声で効率化 — 転記作業をゼロにする方法</h1>
+    <p class="meta">2026年3月27日 公開</p>
+
+    <p>訪問介護のヘルパーさんにとって、<strong>訪問後の記録入力</strong>は大きな負担です。1日5〜8件の訪問、それぞれに記録を残す必要がある。移動中にスマホでメモして、事務所に戻ってPCで打ち直す——この「転記作業」に時間を取られていませんか？</p>
+
+    <div class="highlight">
+      <strong>現場の声：</strong>「利用者さんと向き合う時間を増やしたいのに、記録の入力に追われている」
+    </div>
+
+    <h2>記録システムに直接音声入力できない問題</h2>
+    <p>Windows音声入力（Win+H）は便利ですが、介護の記録システムとの相性が悪いことが多いです。</p>
+    <ul>
+      <li>独自の入力フォームで音声入力が受け付けられない</li>
+      <li>誤変換がそのまま記録に残ってしまう</li>
+      <li>「食事を摂取」が「食事を接種」になる等、介護用語の誤変換が多い</li>
+      <li>入力フィールドが小さく、確認しづらい</li>
+    </ul>
+
+    <h2>VoiceDropperで解決：「話す → 確認 → 貼る」の3ステップ</h2>
+
+    <div class="scenario">
+      <h3>利用シーン：訪問介護の記録入力</h3>
+      <ol>
+        <li>事務所のPCでVoiceDropperを起動（常に画面の隅に浮いている）</li>
+        <li>🎤ボタンを押して「午前10時訪問。バイタル測定、体温36度5分、血圧128の82。食事介助、主食8割摂取。排泄介助2回。特記事項なし」と話す</li>
+        <li>テキストを目で確認。「摂取」が「接種」になっていたら修正</li>
+        <li>記録システムをクリック → 自動でコピーされる</li>
+        <li>Ctrl+V で貼り付けて完了</li>
+      </ol>
+    </div>
+
+    <h2>介護現場にフィットする理由</h2>
+
+    <h3>常に最前面で「すぐ使える」</h3>
+    <p>記録システム、Excelの勤怠表、メールなど、複数のウィンドウを開いていても、VoiceDropperは常に最前面に浮いています。わざわざメモ帳を探す必要がありません。</p>
+
+    <h3>履歴機能で「同じ記録を使い回せる」</h3>
+    <p>「特記事項なし」「バイタル正常範囲内」など、よく使う文言は履歴から呼び出せます。毎回同じことを話す必要はありません。</p>
+
+    <h3>誤変換を確認してから貼れる</h3>
+    <p>介護記録は公的文書です。誤字があってはいけません。VoiceDropperなら、必ず目で確認してから記録システムに入力できます。</p>
+
+    <h3>PCが苦手な方でも使える</h3>
+    <p>ボタンは7つだけ。マイクボタンを押して話すだけなので、ITに詳しくないスタッフでもすぐに使えます。</p>
+
+    <h2>導入コストはゼロ</h2>
+    <ul>
+      <li><strong>無料</strong>で使えます</li>
+      <li>インストール不要（ファイル1つをダブルクリックするだけ）</li>
+      <li>PCのスペックを問わない（超軽量）</li>
+      <li>ネット接続不要で動作（音声入力はWindowsの標準機能）</li>
+    </ul>
+
+    <div class="highlight">
+      事業所全体で導入しても費用はゼロ。試して合わなければ、ファイルを削除するだけです。
+    </div>
+
+    <div class="cta-box">
+      <h3>介護記録の入力負担を減らしませんか？</h3>
+      <p>無料ダウンロード。まずは1日使ってみてください。</p>
+      <a href="/contents/VoiceDropper/#download" class="btn">ダウンロードページへ</a>
+    </div>
+
+    <h2>こんな介護・福祉の現場にも</h2>
+    <ul>
+      <li><strong>デイサービス</strong> — 連絡帳・活動記録の入力</li>
+      <li><strong>グループホーム</strong> — 日誌・申し送り</li>
+      <li><strong>ケアマネジャー</strong> — ケアプラン・支援経過の記録</li>
+      <li><strong>相談支援専門員</strong> — 面談記録・モニタリング</li>
+    </ul>
+  </article>
+
+  <footer class="footer">
+    <p>&copy; 2026 <a href="https://door-fujita.com">藤田建具店</a> — <a href="/contents/VoiceDropper/">VoiceDropper</a></p>
+  </footer>
+</body>
+</html>
